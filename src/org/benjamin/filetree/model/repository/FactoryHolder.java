@@ -16,7 +16,7 @@ public class FactoryHolder {
   
   public static EntityManagerFactory getFactory() {
     if (factory == null || !factory.isOpen()) {
-      Logger.getLogger("org.hibernate").setLevel(Level.OFF);
+      Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
       factory = new Configuration()
                    .configure("hibernate.cfg.xml")
                    .addAnnotatedClass(Branch.class)

@@ -11,6 +11,7 @@ import org.benjamin.filetree.model.repository.BranchRepositoryI;
 import org.benjamin.filetree.model.repository.BranchRepositoryImpl;
 
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -19,6 +20,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 public class FileTreeController {
 
@@ -30,26 +33,67 @@ public class FileTreeController {
   @FXML private Button addLeafBtn;
   @FXML private Button renameBtn;
   @FXML private Button deleteBtn;
+  @FXML private TextField renameField;
   
   private FileTreeModel model;
+  private TreeComponentNodeFactory nodeFactory;
+  private SelectionModel<TreeComponentNode> selection = new MySelectionModel<>();
+  private EventHandler<? super MouseEvent> treeNodeClickHandler = this::treeNodeClicked;
+  
+  public FileTreeController() {
+    // TODO init fields
+  }
   
   @FXML
   public void initialize() {
+    // TODO: remove
     BranchRepositoryI repo = new BranchRepositoryImpl();
     Branch branch = repo.get(1);
     List<Label> labels = new ArrayList<>();
     for (Branch b : branch.getChildren()) {
       Label l = createLabel(b.getName(), "branch");
       labels.add(l);
+      l.setOnMouseClicked(treeNodeClickHandler);
     }
     for (Leaf leaf : branch.getLeafs()) {
       Label l = createLabel(leaf.getName(), "leaf");
       labels.add(l);
+      l.setOnMouseClicked(treeNodeClickHandler);
     }
     ObservableList<Node> children = folderView.getChildren();
     children.setAll(labels);
+//    updateFolderView();
+    renameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+      // if renameField loses focus
+      if (!newValue.booleanValue()) {
+        commitRenaming();
+      }
+    });
+  }
+  
+  public void treeNodeClicked(MouseEvent event) {
+    TreeComponentNode source = (TreeComponentNode) event.getSource();
+    selection.SetSelected(source);
+    MouseButton button = event.getButton();
+    int clickCount = event.getClickCount();
+    if (button == MouseButton.PRIMARY && clickCount == 2 && source.getType() == ComponentEnum.COMPOSITE) {
+      model.goTo(source.getIdentifier());
+      updateFolderView();
+    }
+    System.out.println(String.format("Mouse button: %s, clickcount: %d", button.toString(), clickCount));
+    event.consume();
   }
 
+  private void updateFolderView() {
+    List<TreeComponent> models = model.getTreeComponents();
+    List<TreeComponentNode> nodes = new ArrayList<>(models.size());
+    for (TreeComponent treeComponent : models) {
+      nodes.add(nodeFactory.createNode(treeComponent));
+    }
+    folderView.getChildren().setAll(nodes);
+  }
+
+  @Deprecated
   private Label createLabel(String name, String className) {
     Label label = new Label(name);
     label.getStyleClass().add(className);
@@ -60,55 +104,82 @@ public class FileTreeController {
   @FXML 
   public void back() {
     model.back();
-    if (model.backIsEmpty()) {
-      backBtn.setDisable(true);
-    }
+    updateFolderView();
+    backBtn.setDisable(model.backIsEmpty());
   }
 
   @FXML 
   public void forward() {
     model.forward();
-    if (model.forwardIsEmpty()) {
-      forwardBtn.setDisable(true);
-    }
+    updateFolderView();
+    forwardBtn.setDisable(model.forwardIsEmpty());
   }
-
-  @FXML 
-  public void search(KeyEvent event) {
-//    boolean b = event.getCode() == KeyCode.ENTER;
+  
+  @FXML
+  public void search() {
+    System.out.println("search action");
   }
 
   @FXML 
   public void addNewBranch() {
     TreeComponent c = model.createNewBranch();
-    // TODO: Create node for component
-    // add to folderView
-    // select node
-    // rename();
+    updateFolderView();
+    TreeComponentNode node = findMatchingNode(c);
+    selection.SetSelected(node);
+    rename();
   }
 
   @FXML 
   public void AddNewLeaf() {
     TreeComponent c = model.createNewLeaf();
-    // TODO: Create node for component
-    // add to folderView
-    // select node
-    // rename();
+    updateFolderView();
+    TreeComponentNode node = findMatchingNode(c);
+    selection.SetSelected(node);
+    rename();
+  }
+
+  private TreeComponentNode findMatchingNode(TreeComponent c) {
+    TreeComponentNode match = null;
+    ObservableList<Node> children = folderView.getChildren();
+    for (Node node : children) {
+      match = (TreeComponentNode) node;
+      if (c.getType() == match.getType() && c.getId() == match.getIdentifier()) {
+        break;
+      }
+    }
+    return match;
   }
 
   @FXML 
   public void rename() {
-    // TODO: implement rename method
-    // get selected from folderView
-    // start renaming
-    // set new name on corresponding object
+    if (!selection.isEmpty()) {
+      TreeComponentNode node = selection.getSelected();
+      // show rename textField
+      renameField.setVisible(true);
+      // set TextField text to node text
+      renameField.setText(node.getText());
+      // select all in TextField
+      renameField.requestFocus();
+      // TODO check selection
+      renameField.selectAll();
+    }
   }
 
   @FXML 
   public void delete() {
-    // TODO: implement delete method
-    // get selected from folderView
-    // 
+    if (!selection.isEmpty()) {
+      TreeComponentNode node = selection.getSelected();
+      model.remove(node.getType(), node.getIdentifier());
+      folderView.getChildren().remove(node);
+    }
+  }
+
+  @FXML 
+  public void commitRenaming() {
+    TreeComponentNode node = selection.getSelected();
+    // set new name on corresponding object
+    model.rename(node.getType(), node.getIdentifier(), renameField.getText());
+    renameField.setVisible(false);
   }
   
 }

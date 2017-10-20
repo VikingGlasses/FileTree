@@ -14,7 +14,7 @@
           <Button fx:id="backBtn" mnemonicParsing="false" onAction="#back" text="&lt;" />
             <Button fx:id="forwardBtn" mnemonicParsing="false" onAction="#forward" text="&gt;" />
             <Separator prefHeight="34.0" prefWidth="29.0" />
-            <TextField fx:id="searchField" onKeyPressed="#search" />
+            <TextField fx:id="searchField" onAction="#search" />
         </items>
       </ToolBar>
       <FlowPane fx:id="folderView" prefHeight="286.0" prefWidth="640.0" />
@@ -24,6 +24,7 @@
             <Button fx:id="addLeafBtn" mnemonicParsing="false" onAction="#AddNewLeaf" text="Add Leaf" />
             <Button fx:id="renameBtn" mnemonicParsing="false" onAction="#rename" text="Rename" />
             <Button fx:id="deleteBtn" mnemonicParsing="false" onAction="#delete" text="Delete" />
+            <TextField fx:id="renameField" onAction="#commitRenaming" visible="false" />
         </items>
       </ToolBar>
   </children>
