@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.benjamin.filetree.model.TreeComponent;
+import org.benjamin.filetree.model.FileTree;
 import org.benjamin.filetree.model.FileTreeModel;
 import org.benjamin.filetree.model.entity.Branch;
 import org.benjamin.filetree.model.entity.Leaf;
@@ -18,8 +19,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
@@ -35,34 +34,16 @@ public class FileTreeController {
   @FXML private Button deleteBtn;
   @FXML private TextField renameField;
   
-  private FileTreeModel model;
+  private FileTreeModel model = new FileTree();
   private TreeComponentNodeFactory nodeFactory;
   private SelectionModel<TreeComponentNode> selection = new MySelectionModel<>();
   private EventHandler<? super MouseEvent> treeNodeClickHandler = this::treeNodeClicked;
   
-  public FileTreeController() {
-    // TODO init fields
-  }
-  
+  public FileTreeController() {}
+
   @FXML
   public void initialize() {
-    // TODO: remove
-    BranchRepositoryI repo = new BranchRepositoryImpl();
-    Branch branch = repo.get(1);
-    List<Label> labels = new ArrayList<>();
-    for (Branch b : branch.getChildren()) {
-      Label l = createLabel(b.getName(), "branch");
-      labels.add(l);
-      l.setOnMouseClicked(treeNodeClickHandler);
-    }
-    for (Leaf leaf : branch.getLeafs()) {
-      Label l = createLabel(leaf.getName(), "leaf");
-      labels.add(l);
-      l.setOnMouseClicked(treeNodeClickHandler);
-    }
-    ObservableList<Node> children = folderView.getChildren();
-    children.setAll(labels);
-//    updateFolderView();
+    updateFolderView();
     renameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
       // if renameField loses focus
       if (!newValue.booleanValue()) {
@@ -70,7 +51,7 @@ public class FileTreeController {
       }
     });
   }
-  
+
   public void treeNodeClicked(MouseEvent event) {
     TreeComponentNode source = (TreeComponentNode) event.getSource();
     selection.SetSelected(source);
@@ -80,25 +61,20 @@ public class FileTreeController {
       model.goTo(source.getIdentifier());
       updateFolderView();
     }
+    // TODO remove line
     System.out.println(String.format("Mouse button: %s, clickcount: %d", button.toString(), clickCount));
     event.consume();
   }
 
   private void updateFolderView() {
-    List<TreeComponent> models = model.getTreeComponents();
+    List<TreeComponent> models = model.getCurrentTreeComponents();
     List<TreeComponentNode> nodes = new ArrayList<>(models.size());
     for (TreeComponent treeComponent : models) {
-      nodes.add(nodeFactory.createNode(treeComponent));
+      TreeComponentNode node = nodeFactory.createNode(treeComponent);
+      nodes.add(node);
+      node.setOnMouseClicked(treeNodeClickHandler);
     }
     folderView.getChildren().setAll(nodes);
-  }
-
-  @Deprecated
-  private Label createLabel(String name, String className) {
-    Label label = new Label(name);
-    label.getStyleClass().add(className);
-    label.setFocusTraversable(true);
-    return label;
   }
 
   @FXML 
@@ -117,7 +93,8 @@ public class FileTreeController {
   
   @FXML
   public void search() {
-    System.out.println("search action");
+    model.search(searchField.getText());
+    updateFolderView();
   }
 
   @FXML 
@@ -171,6 +148,7 @@ public class FileTreeController {
       TreeComponentNode node = selection.getSelected();
       model.remove(node.getType(), node.getIdentifier());
       folderView.getChildren().remove(node);
+      updateFolderView();
     }
   }
 
@@ -180,6 +158,7 @@ public class FileTreeController {
     // set new name on corresponding object
     model.rename(node.getType(), node.getIdentifier(), renameField.getText());
     renameField.setVisible(false);
+    updateFolderView();
   }
   
 }
