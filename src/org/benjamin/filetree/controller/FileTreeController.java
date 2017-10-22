@@ -53,6 +53,7 @@ public class FileTreeController {
   }
 
   public void treeNodeClicked(MouseEvent event) {
+    // TODO type check?
     TreeComponentNode source = (TreeComponentNode) event.getSource();
     selection.SetSelected(source);
     MouseButton button = event.getButton();
@@ -61,7 +62,7 @@ public class FileTreeController {
       model.goTo(source.getIdentifier());
       updateFolderView();
     }
-    // TODO remove line
+    // TODO remove println
     System.out.println(String.format("Mouse button: %s, clickcount: %d", button.toString(), clickCount));
     event.consume();
   }
@@ -119,6 +120,7 @@ public class FileTreeController {
     TreeComponentNode match = null;
     ObservableList<Node> children = folderView.getChildren();
     for (Node node : children) {
+      // TODO type check?
       match = (TreeComponentNode) node;
       if (c.getType() == match.getType() && c.getId() == match.getIdentifier()) {
         break;

@@ -21,8 +21,7 @@ public class FileTree implements FileTreeModel {
   public void back() {
     if (!back.isEmpty()) {
       forward.push(current);
-      current = back.pop();
-      updateCurrentComponents();
+      goTo(back.pop());
     }
   }
 
@@ -35,8 +34,7 @@ public class FileTree implements FileTreeModel {
   public void forward() {
     if (!forward.isEmpty()) {
       back.push(current);
-      current = forward.pop();
-      updateCurrentComponents();
+      goTo(forward.pop());
     }
   }
 
@@ -75,6 +73,9 @@ public class FileTree implements FileTreeModel {
   @Override
   public void goTo(int identifier) {
     // TODO Implement go to method
+    // TODO check so id is valid
+    current = identifier;
+    updateCurrentComponents();
   }
 
   @Override

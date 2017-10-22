@@ -1,8 +1,5 @@
 package org.benjamin.filetree.model.repository;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.persistence.EntityManagerFactory;
 
 import org.benjamin.filetree.model.entity.Branch;
@@ -12,11 +9,11 @@ import org.hibernate.cfg.Configuration;
 
 public class FactoryHolder {
   
-  static EntityManagerFactory factory;
+  private static EntityManagerFactory factory;
   
   public static EntityManagerFactory getFactory() {
     if (factory == null || !factory.isOpen()) {
-      Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
+//      Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
       factory = new Configuration()
                    .configure("hibernate.cfg.xml")
                    .addAnnotatedClass(Branch.class)
