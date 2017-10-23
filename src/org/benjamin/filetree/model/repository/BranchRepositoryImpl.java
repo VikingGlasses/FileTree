@@ -1,5 +1,6 @@
 package org.benjamin.filetree.model.repository;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -7,6 +8,7 @@ import javax.persistence.EntityManagerFactory;
 
 import org.benjamin.filetree.model.entity.Branch;
 import org.benjamin.filetree.model.entity.Leaf;
+import org.hibernate.Session;
 
 public class BranchRepositoryImpl implements BranchRepositoryI {
 
@@ -34,9 +36,14 @@ public class BranchRepositoryImpl implements BranchRepositoryI {
     
     EntityManagerFactory factory = FactoryHolder.getFactory();
     EntityManager manager = factory.createEntityManager();
+    manager.getTransaction().begin();
     Branch parent = manager.getReference(Branch.class, parentId);
     branch.setParent(parent);
     manager.persist(branch);
+    manager.getTransaction().commit();
+    manager.close();
+//    Session session = manager.unwrap(Session.class);
+//    session.save(branch);
     return branch;
   }
 
@@ -45,10 +52,11 @@ public class BranchRepositoryImpl implements BranchRepositoryI {
 
     EntityManagerFactory factory = FactoryHolder.getFactory();
     EntityManager manager = factory.createEntityManager();
-    
+    manager.getTransaction().begin();
     Branch branch = manager.find(Branch.class, id);
     branch.setName(name);
-    
+    manager.getTransaction().commit();
+    manager.close();
     return true;
   }
 
@@ -66,9 +74,10 @@ public class BranchRepositoryImpl implements BranchRepositoryI {
 
     EntityManagerFactory factory = FactoryHolder.getFactory();
     EntityManager manager = factory.createEntityManager();
-    
+    manager.getTransaction().begin();
     Branch branch = manager.find(Branch.class, id);
     manager.remove(branch);
+    manager.getTransaction().commit();
     return true;
   }
 
@@ -111,9 +120,26 @@ public class BranchRepositoryImpl implements BranchRepositoryI {
   }
 
   @Override
-  public Set<Branch> search(int id, String text) {
-    // TODO Auto-generated method stub
-    return null;
+  public List<Branch> search(int id, String text) {
+    EntityManager manager = null;
+    List<Branch> result;
+    try {
+      EntityManagerFactory factory = FactoryHolder.getFactory();
+      manager = factory.createEntityManager();
+      manager.getTransaction().begin();
+      Branch branch = manager.find(Branch.class, id);
+      Session session = manager.unwrap(Session.class);
+      result = session.createQuery("FROM Branch as b WHERE b.parent.id=:id AND b.name like '%" + text + "%'", Branch.class)
+                          .setProperties(branch)
+                          .getResultList();
+      
+      manager.getTransaction().commit();
+    } finally {
+      if (manager != null) {
+        manager.close();
+      }
+    }
+    return result;
   }
 
 }

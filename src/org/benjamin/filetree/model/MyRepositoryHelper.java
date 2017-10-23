@@ -10,15 +10,16 @@ import org.benjamin.filetree.model.entity.Leaf;
 import org.benjamin.filetree.model.repository.BranchRepositoryI;
 import org.benjamin.filetree.model.repository.BranchRepositoryImpl;
 import org.benjamin.filetree.model.repository.LeafRepositoryI;
+import org.benjamin.filetree.model.repository.LeafRepositoryImpl;
 
 public class MyRepositoryHelper implements RepositoryHelper {
   
   private BranchRepositoryI branchRepo = new BranchRepositoryImpl();
-  private LeafRepositoryI leafRepo;
+  private LeafRepositoryI leafRepo = new LeafRepositoryImpl();
 
   @Override
   public TreeComponent createNewBranch(int parentId) {
-    Branch branch = branchRepo.add("New branch", parentId);
+    Branch branch = branchRepo.add("New Branch", parentId);
     
     return branch;
   }

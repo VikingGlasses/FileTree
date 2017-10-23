@@ -8,7 +8,7 @@ public class TreeComponentComperator implements Comparator<TreeComponent> {
   public int compare(TreeComponent o1, TreeComponent o2) {
     int i = o1.getComponentType().compareTo(o2.getComponentType());
     if (i == 0) {
-      i = o1.getText().compareTo(o2.getText());
+      i = o1.getText().compareToIgnoreCase(o2.getText());
       if (i == 0) {
         i = Integer.compare(o1.getIdentifier(), o2.getIdentifier());
       }

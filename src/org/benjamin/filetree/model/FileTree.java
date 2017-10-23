@@ -31,7 +31,8 @@ public class FileTree implements FileTreeModel {
     if (!back.isEmpty()) {
       // TODO fix pot. bug pushing current
       forward.push(current);
-      goTo(back.pop());
+      current = back.pop();
+      updateCurrentComponents();
     }
   }
 
@@ -45,7 +46,8 @@ public class FileTree implements FileTreeModel {
     if (!forward.isEmpty()) {
       // TODO fix pot. bug pushing current
       back.push(current);
-      goTo(forward.pop());
+      current = forward.pop();
+      updateCurrentComponents();
     }
   }
 
@@ -109,6 +111,7 @@ public class FileTree implements FileTreeModel {
   public void goTo(int identifier) {
     // TODO check so id is valid
     back.push(current);
+    forward.clear();
     current = identifier;
     updateCurrentComponents();
   }

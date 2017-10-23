@@ -4,6 +4,10 @@ import org.benjamin.filetree.model.TreeComponent;
 
 public class TreeComponentNodeFactoryImpl implements TreeComponentNodeFactory {
 
+  private void setCssClass(TreeComponentNode node, ComponentEnum type) {
+    node.getStyleClass().add(type.toString());
+  }
+  
   @Override
   public TreeComponentNode createBranchNode(int id, String text) {
     TreeComponentNode node = new TreeComponentNode();
@@ -12,10 +16,6 @@ public class TreeComponentNodeFactoryImpl implements TreeComponentNodeFactory {
     node.setType(ComponentEnum.BRANCH);
     setCssClass(node, node.getType());
     return node;
-  }
-
-  private void setCssClass(TreeComponentNode node, ComponentEnum type) {
-    node.getStyleClass().add(type.toString());
   }
 
   @Override

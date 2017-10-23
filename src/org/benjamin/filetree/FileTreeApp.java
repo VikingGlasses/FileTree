@@ -18,7 +18,7 @@ public class FileTreeApp extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
     FactoryHolder.getFactory();
-    primaryStage.setOnCloseRequest((event) -> FactoryHolder.getFactory().close());
+    primaryStage.setOnCloseRequest(event -> FactoryHolder.getFactory().close());
     
     Parent root = FXMLLoader.load(getClass().getResource("FileTree.fxml"));
     Scene scene = new Scene(root);

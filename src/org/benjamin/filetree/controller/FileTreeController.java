@@ -77,20 +77,20 @@ public class FileTreeController {
       node.setOnMouseClicked(treeNodeClickHandler);
     }
     folderView.getChildren().setAll(nodes);
+    forwardBtn.setDisable(model.forwardIsEmpty());
+    backBtn.setDisable(model.backIsEmpty());
   }
 
   @FXML 
   public void back() {
     model.back();
     updateFolderView();
-    backBtn.setDisable(model.backIsEmpty());
   }
 
   @FXML 
   public void forward() {
     model.forward();
     updateFolderView();
-    forwardBtn.setDisable(model.forwardIsEmpty());
   }
   
   @FXML
@@ -122,8 +122,9 @@ public class FileTreeController {
     ObservableList<Node> children = folderView.getChildren();
     for (Node node : children) {
       // TODO type check?
-      match = (TreeComponentNode) node;
-      if (c.getComponentType() == match.getType() && c.getIdentifier() == match.getIdentifier()) {
+      TreeComponentNode check = (TreeComponentNode) node;
+      if (c.getComponentType() == check.getType() && c.getIdentifier() == check.getIdentifier()) {
+        match = check;
         break;
       }
     }

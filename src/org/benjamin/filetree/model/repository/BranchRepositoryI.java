@@ -1,5 +1,6 @@
 package org.benjamin.filetree.model.repository;
 
+import java.util.List;
 import java.util.Set;
 
 import org.benjamin.filetree.model.entity.Branch;
@@ -21,6 +22,6 @@ public interface BranchRepositoryI {
   
   Set<Leaf> getLeafsFrom(int id);
 
-  Set<Branch> search(int id, String text);
+  List<Branch> search(int id, String text);
 
 }
