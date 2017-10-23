@@ -7,9 +7,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.benjamin.filetree.controller.ComponentEnum;
+import org.benjamin.filetree.model.TreeComponent;
+
 @Entity
 @Table(name="leaf")
-public class Leaf {
+public class Leaf implements TreeComponent {
   
   @Id
   @Column(name="id")
@@ -80,7 +83,22 @@ public class Leaf {
 
   @Override
   public String toString() {
-    return String.format("Leaf [id=%s, name=%s, color=%s, parent=%d]", id, name, color, parent.getId());
+    return String.format("Leaf [id=%s, name=%s, color=%s, parent=%d]", id, name, color, parent.getIdentifier());
+  }
+
+  @Override
+  public int getIdentifier() {
+    return id;
+  }
+
+  @Override
+  public String getText() {
+    return name;
+  }
+
+  @Override
+  public ComponentEnum getComponentType() {
+    return ComponentEnum.LEAF;
   }
 
 }

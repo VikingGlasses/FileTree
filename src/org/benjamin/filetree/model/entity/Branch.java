@@ -12,9 +12,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.benjamin.filetree.controller.ComponentEnum;
+import org.benjamin.filetree.controller.TreeComponentNodeFactory;
+import org.benjamin.filetree.model.TreeComponent;
+
 @Entity
 @Table(name="branch")
-public class Branch {
+public class Branch implements TreeComponent {
   
   @Id
   @Column(name="id")
@@ -84,6 +88,21 @@ public class Branch {
   @Override
   public String toString() {
     return String.format("Branch [id=%s, parent=%s]", id, parent);
+  }
+
+  @Override
+  public int getIdentifier() {
+    return id;
+  }
+
+  @Override
+  public String getText() {
+    return name;
+  }
+
+  @Override
+  public ComponentEnum getComponentType() {
+    return ComponentEnum.BRANCH;
   }
 
 }

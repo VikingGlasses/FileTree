@@ -9,16 +9,18 @@ public interface BranchRepositoryI {
   
   Branch get(int id);
   
-  Branch add(String name, Branch parent);
+  Branch add(String name, int parentId);
   
-  void changeName(int id, String name);
+  boolean changeName(int id, String name);
   
   void move(Branch branch, Branch newParent);
   
-  void delete(int id);
+  boolean delete(int id);
   
-  Set<Branch> getChildrenFrom(Branch branch);
+  Set<Branch> getChildrenFrom(int id);
   
-  Set<Leaf> getLeafsFrom(Branch branch);
+  Set<Leaf> getLeafsFrom(int id);
+
+  Set<Branch> search(int id, String text);
 
 }

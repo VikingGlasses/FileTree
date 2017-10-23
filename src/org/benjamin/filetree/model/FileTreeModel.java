@@ -1,6 +1,6 @@
 package org.benjamin.filetree.model;
 
-import java.util.List;
+import java.util.Set;
 
 import org.benjamin.filetree.controller.ComponentEnum;
 
@@ -51,7 +51,7 @@ public interface FileTreeModel {
    * Returns the current tree components.
    * @return Current tree components.
    */
-  List<TreeComponent> getCurrentTreeComponents();
+  Set<TreeComponent> getCurrentTreeComponents();
 
   /**
    * Renames a "node".

@@ -2,6 +2,7 @@ package org.benjamin.filetree.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.benjamin.filetree.model.TreeComponent;
 import org.benjamin.filetree.model.FileTree;
@@ -35,7 +36,7 @@ public class FileTreeController {
   @FXML private TextField renameField;
   
   private FileTreeModel model = new FileTree();
-  private TreeComponentNodeFactory nodeFactory;
+  private TreeComponentNodeFactory nodeFactory = new TreeComponentNodeFactoryImpl();
   private SelectionModel<TreeComponentNode> selection = new MySelectionModel<>();
   private EventHandler<? super MouseEvent> treeNodeClickHandler = this::treeNodeClicked;
   
@@ -58,7 +59,7 @@ public class FileTreeController {
     selection.SetSelected(source);
     MouseButton button = event.getButton();
     int clickCount = event.getClickCount();
-    if (button == MouseButton.PRIMARY && clickCount == 2 && source.getType() == ComponentEnum.COMPOSITE) {
+    if (button == MouseButton.PRIMARY && clickCount == 2 && source.getType() == ComponentEnum.BRANCH) {
       model.goTo(source.getIdentifier());
       updateFolderView();
     }
@@ -68,7 +69,7 @@ public class FileTreeController {
   }
 
   private void updateFolderView() {
-    List<TreeComponent> models = model.getCurrentTreeComponents();
+    Set<TreeComponent> models = model.getCurrentTreeComponents();
     List<TreeComponentNode> nodes = new ArrayList<>(models.size());
     for (TreeComponent treeComponent : models) {
       TreeComponentNode node = nodeFactory.createNode(treeComponent);
@@ -122,7 +123,7 @@ public class FileTreeController {
     for (Node node : children) {
       // TODO type check?
       match = (TreeComponentNode) node;
-      if (c.getType() == match.getType() && c.getId() == match.getIdentifier()) {
+      if (c.getComponentType() == match.getType() && c.getIdentifier() == match.getIdentifier()) {
         break;
       }
     }
