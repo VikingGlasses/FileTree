@@ -1,7 +1,6 @@
 package org.benjamin.filetree.model.repository;
 
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -35,34 +34,10 @@ public class JpaExecutionContainerImpl implements JpaExecutionContainer {
   }
 
   @Override
-  public <T> List<T> excuteListResult(ListResultExecutable<T> executable) {
+  public <T> Collection<T> excuteListResult(CollectionResultExecutable<T> executable) {
     EntityManager manager = null;
     EntityTransaction transaction = null;
-    List<T> result = null;
-    try {
-      manager = FactoryHolder.getFactory().createEntityManager();
-      transaction = manager.getTransaction();
-      transaction.begin();
-      result = executable.execute(manager);
-      transaction.commit();
-    } catch (HibernateException e) {
-      e.printStackTrace();
-      if (transaction != null) {
-        transaction.rollback();
-      }
-    } finally {
-      if (manager != null) {
-        manager.close();
-      }
-    }
-    return result;
-  }
-
-  @Override
-  public <T> Set<T> excuteSetResult(SetResultExecutable<T> executable) {
-    EntityManager manager = null;
-    EntityTransaction transaction = null;
-    Set<T> result = null;
+    Collection<T> result = null;
     try {
       manager = FactoryHolder.getFactory().createEntityManager();
       transaction = manager.getTransaction();

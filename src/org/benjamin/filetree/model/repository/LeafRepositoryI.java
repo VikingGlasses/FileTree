@@ -1,5 +1,6 @@
 package org.benjamin.filetree.model.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.benjamin.filetree.model.entity.Leaf;
@@ -14,6 +15,6 @@ public interface LeafRepositoryI {
   
   boolean delete(int id);
 
-  List<Leaf> search(int id, String text);
+  Collection<Leaf> search(int id, String text);
 
 }

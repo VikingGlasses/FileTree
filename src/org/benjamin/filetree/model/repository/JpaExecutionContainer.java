@@ -1,14 +1,11 @@
 package org.benjamin.filetree.model.repository;
 
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
 
 public interface JpaExecutionContainer {
 
   <T> T execute(SingleResultExecutable<T> executable);
 
-  <T> List<T> excuteListResult(ListResultExecutable<T> executable);
-
-  <T> Set<T> excuteSetResult(SetResultExecutable<T> executable);
+  <T> Collection<T> excuteListResult(CollectionResultExecutable<T> executable);
 
 }

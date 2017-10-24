@@ -1,6 +1,6 @@
 package org.benjamin.filetree.model.repository;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.benjamin.filetree.model.entity.Branch;
 import org.benjamin.filetree.model.entity.Leaf;
@@ -50,7 +50,7 @@ public class LeafRepositoryImpl implements LeafRepositoryI {
   }
 
   @Override
-  public List<Leaf> search(int id, String text) {
+  public Collection<Leaf> search(int id, String text) {
     String query = "FROM Leaf as l WHERE l.parent.id=:id AND l.name like '%" + text + "%'";
     return container.excuteListResult(manager -> {
       return manager.createQuery(query, Leaf.class)

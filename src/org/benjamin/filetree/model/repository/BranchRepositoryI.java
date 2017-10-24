@@ -1,7 +1,6 @@
 package org.benjamin.filetree.model.repository;
 
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
 
 import org.benjamin.filetree.model.entity.Branch;
 import org.benjamin.filetree.model.entity.Leaf;
@@ -18,10 +17,10 @@ public interface BranchRepositoryI {
   
   boolean delete(int id);
   
-  Set<Branch> getChildrenFrom(int id);
+  Collection<Branch> getChildrenFrom(int id);
   
-  Set<Leaf> getLeafsFrom(int id);
+  Collection<Leaf> getLeafsFrom(int id);
 
-  List<Branch> search(int id, String text);
+  Collection<Branch> search(int id, String text);
 
 }

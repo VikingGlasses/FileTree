@@ -1,10 +1,10 @@
 package org.benjamin.filetree.model.repository;
 
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
 
 import org.benjamin.filetree.model.entity.Branch;
 import org.benjamin.filetree.model.entity.Leaf;
+
 
 public class BranchRepositoryImpl implements BranchRepositoryI {
   
@@ -63,23 +63,23 @@ public class BranchRepositoryImpl implements BranchRepositoryI {
   }
 
   @Override
-  public Set<Branch> getChildrenFrom(int id) {
-    return container.excuteSetResult(manager -> {
+  public Collection<Branch> getChildrenFrom(int id) {
+    return container.excuteListResult(manager -> {
       Branch branch = manager.find(Branch.class, id);
       return branch.getChildren();
     });
   }
 
   @Override
-  public Set<Leaf> getLeafsFrom(int id) {
-    return container.excuteSetResult(manager -> {
+  public Collection<Leaf> getLeafsFrom(int id) {
+    return container.excuteListResult(manager -> {
       Branch branch = manager.find(Branch.class, id);
       return branch.getLeafs();
     });
   }
 
   @Override
-  public List<Branch> search(int id, String text) {
+  public Collection<Branch> search(int id, String text) {
     String query = "FROM Branch as b WHERE b.parent.id=:id AND b.name like '%" + text + "%'";
     return container.excuteListResult(manager -> {
       return manager.createQuery(query, Branch.class)
