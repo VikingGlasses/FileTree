@@ -14,7 +14,7 @@ public interface BranchRepositoryI {
   
   boolean changeName(int id, String name);
   
-  void move(Branch branch, Branch newParent);
+  boolean move(int id, int newParentId);
   
   boolean delete(int id);
   

@@ -9,27 +9,37 @@ import org.benjamin.filetree.controller.ComponentEnum;
 
 public class FileTree implements FileTreeModel {
   
-  private Deque<Integer> back = new ArrayDeque<>();
-  private Deque<Integer> forward = new ArrayDeque<>();
-  private int current;
+  private Deque<History<Integer>> back = new ArrayDeque<>();
+  private Deque<History<Integer>> forward = new ArrayDeque<>();
+  private History<Integer> current;
   private Set<TreeComponent> currentComponents = new TreeSet<>();
   
   private RepositoryHelper repoHelper = new MyRepositoryHelper();
   
   public FileTree() {
-    current = 1;
+    current = createHistory(1);
     updateCurrentComponents();
   }
 
   private void updateCurrentComponents() {
-    // TODO set current components
-    currentComponents = repoHelper.getChildrenFrom(current);
+    if (current.isSearch()) {
+      currentComponents =  repoHelper.search(current.getId(), current.getText()); 
+    } else {
+      currentComponents = repoHelper.getChildrenFrom(current.getId());
+    }
   }
-  
+
+  private History<Integer> createHistory(int identifier) {
+    return new History<>(identifier);
+  }
+
+  private History<Integer> createHistory(String text) {
+    return new History<Integer>(current.getId(), text);
+  }
+
   @Override
   public void back() {
     if (!back.isEmpty()) {
-      // TODO fix pot. bug pushing current
       forward.push(current);
       current = back.pop();
       updateCurrentComponents();
@@ -44,7 +54,6 @@ public class FileTree implements FileTreeModel {
   @Override
   public void forward() {
     if (!forward.isEmpty()) {
-      // TODO fix pot. bug pushing current
       back.push(current);
       current = forward.pop();
       updateCurrentComponents();
@@ -58,14 +67,14 @@ public class FileTree implements FileTreeModel {
 
   @Override
   public TreeComponent createNewBranch() {
-    TreeComponent newBranch = repoHelper.createNewBranch(current);
+    TreeComponent newBranch = repoHelper.createNewBranch(current.getId());
     updateCurrentComponents();
     return newBranch;
   }
 
   @Override
   public TreeComponent createNewLeaf() {
-    TreeComponent newLeaf = repoHelper.createNewLeaf(current);
+    TreeComponent newLeaf = repoHelper.createNewLeaf(current.getId());
     updateCurrentComponents();
     return newLeaf;
   }
@@ -80,7 +89,6 @@ public class FileTree implements FileTreeModel {
         repoHelper.removeLeaf(identifier);
         break;
       default:
-        // TODO do something?
         break;
     }
     updateCurrentComponents();
@@ -101,7 +109,6 @@ public class FileTree implements FileTreeModel {
         repoHelper.renameLeaf(identifier, newName);
         break;
       default:
-        // TODO do something?
         break;
     }
     updateCurrentComponents();
@@ -109,16 +116,33 @@ public class FileTree implements FileTreeModel {
 
   @Override
   public void goTo(int identifier) {
-    // TODO check so id is valid
     back.push(current);
     forward.clear();
-    current = identifier;
+    current = createHistory(identifier);
     updateCurrentComponents();
   }
 
   @Override
   public void search(String text) {
-    currentComponents = repoHelper.search(current, text);
+    if (!(current.isSearch() && current.getText().equalsIgnoreCase(text))) {
+      forward.clear();
+      back.push(current);
+      current = createHistory(text);
+      currentComponents = repoHelper.search(current.getId(), text);
+    }
+    /* equivalent to above if statement
+     if (current.isSearch()) {
+      if (!current.getText().equals(text)) {
+        back.push(current);
+        current = new History<Integer>(current.getId(), text);
+        currentComponents = repoHelper.search(current.getId(), text);
+      }
+    } else {
+      back.push(current);
+      current = new History<Integer>(current.getId(), text);
+      currentComponents = repoHelper.search(current.getId(), text);
+    }
+     */
   }
 
 }

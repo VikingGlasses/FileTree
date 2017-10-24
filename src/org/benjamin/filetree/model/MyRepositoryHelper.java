@@ -6,28 +6,32 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.benjamin.filetree.model.entity.Branch;
-import org.benjamin.filetree.model.entity.Leaf;
 import org.benjamin.filetree.model.repository.BranchRepositoryI;
 import org.benjamin.filetree.model.repository.BranchRepositoryImpl;
+import org.benjamin.filetree.model.repository.JpaExecutionContainer;
+import org.benjamin.filetree.model.repository.JpaExecutionContainerImpl;
 import org.benjamin.filetree.model.repository.LeafRepositoryI;
 import org.benjamin.filetree.model.repository.LeafRepositoryImpl;
 
 public class MyRepositoryHelper implements RepositoryHelper {
   
-  private BranchRepositoryI branchRepo = new BranchRepositoryImpl();
-  private LeafRepositoryI leafRepo = new LeafRepositoryImpl();
+  private BranchRepositoryI branchRepo;
+  private LeafRepositoryI leafRepo;
+  
+  public MyRepositoryHelper() {
+    JpaExecutionContainer container = new JpaExecutionContainerImpl();
+    branchRepo = new BranchRepositoryImpl(container);
+    leafRepo = new LeafRepositoryImpl(container);
+  }
 
   @Override
   public TreeComponent createNewBranch(int parentId) {
-    Branch branch = branchRepo.add("New Branch", parentId);
-    
-    return branch;
+    return branchRepo.add("New Branch", parentId);
   }
 
   @Override
   public TreeComponent createNewLeaf(int parentId) {
-    Leaf leaf = leafRepo.add("New Leaf", parentId);
-    return leaf;
+    return leafRepo.add("New Leaf", parentId);
   }
 
   @Override

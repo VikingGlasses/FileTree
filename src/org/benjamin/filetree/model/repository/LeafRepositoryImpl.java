@@ -8,13 +8,17 @@ import org.benjamin.filetree.model.entity.Leaf;
 
 public class LeafRepositoryImpl implements LeafRepositoryI {
 
-  TestExe exe = new TestExe();
+  JpaExecutionContainer container;
   
+  public LeafRepositoryImpl(JpaExecutionContainer container) {
+    this.container = container;
+  }
+
   @Override
   public Leaf add(String name, int parentId) {
     Leaf leaf = new Leaf();
     leaf.setName(name);
-    return exe.execute(manager -> {
+    return container.execute(manager -> {
       Branch parent = manager.find(Branch.class, parentId);
       leaf.setParent(parent);
       manager.persist(leaf);
@@ -24,12 +28,12 @@ public class LeafRepositoryImpl implements LeafRepositoryI {
 
   @Override
   public Leaf get(int id) {
-    return exe.execute(manager -> manager.find(Leaf.class, id));
+    return container.execute(manager -> manager.find(Leaf.class, id));
   }
 
   @Override
   public boolean changeName(int id, String newName) {
-    return exe.executeBooleanResult(manager -> {
+    return container.execute(manager -> {
       Leaf leaf = manager.find(Leaf.class, id);
       leaf.setName(newName);
       return true;
@@ -38,7 +42,7 @@ public class LeafRepositoryImpl implements LeafRepositoryI {
 
   @Override
   public boolean delete(int id) {
-    return exe.executeBooleanResult(manager -> {
+    return container.execute(manager -> {
       Leaf leaf = manager.find(Leaf.class, id);
       manager.remove(leaf);
       return true;
@@ -48,7 +52,7 @@ public class LeafRepositoryImpl implements LeafRepositoryI {
   @Override
   public List<Leaf> search(int id, String text) {
     String query = "FROM Leaf as l WHERE l.parent.id=:id AND l.name like '%" + text + "%'";
-    return exe.excuteListResult(manager -> {
+    return container.excuteListResult(manager -> {
       return manager.createQuery(query, Leaf.class)
                     .setParameter("id", id)
                     .getResultList();
