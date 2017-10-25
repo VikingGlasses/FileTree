@@ -7,13 +7,19 @@ import org.benjamin.filetree.model.entity.Leaf;
 import org.benjamin.filetree.model.entity.Type;
 import org.hibernate.cfg.Configuration;
 
+/**
+ * Singleton class for EntityManagerFactory, uses hibernate as JPA provider.
+ * 
+ * @author benjamin
+ * @see EntityManagerFactory
+ *
+ */
 public class FactoryHolder {
   
   private static EntityManagerFactory factory;
   
   public static EntityManagerFactory getFactory() {
-    if (factory == null || !factory.isOpen()) {
-//      Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
+    if (factory == null) {
       factory = new Configuration()
                    .configure("hibernate.cfg.xml")
                    .addAnnotatedClass(Branch.class)

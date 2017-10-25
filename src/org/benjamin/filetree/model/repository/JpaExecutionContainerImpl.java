@@ -7,6 +7,11 @@ import javax.persistence.EntityTransaction;
 
 import org.hibernate.HibernateException;
 
+/**
+ * Quick and dirty implementation of JpaExecutionContainer, experimental.
+ * @author benjamin
+ *
+ */
 public class JpaExecutionContainerImpl implements JpaExecutionContainer {
 
   @Override

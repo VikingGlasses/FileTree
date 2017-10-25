@@ -1,10 +1,20 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
-.branch {
-	-fx-background-color: red;
+.folderView {
+	-fx-vgap: 15px;
+	-fx-hgap: 15px;
+}
+
+.treeNode {
+	-fx-font-size: 16;
+	-fx-padding: 5px;
+}
+
+.composite {
+	-fx-background-color: saddlebrown;
 }
 
 .leaf {
-	-fx-background-color: green;
+	-fx-background-color: forestgreen;
 }
 

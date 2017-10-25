@@ -63,7 +63,7 @@ public class BranchRepositoryImpl implements BranchRepositoryI {
   }
 
   @Override
-  public Collection<Branch> getChildrenFrom(int id) {
+  public Collection<Branch> getSubBranchesFrom(int id) {
     return container.excuteListResult(manager -> {
       Branch branch = manager.find(Branch.class, id);
       return branch.getChildren();

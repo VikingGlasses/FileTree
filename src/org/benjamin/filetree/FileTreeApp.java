@@ -1,6 +1,5 @@
 package org.benjamin.filetree;
 
-
 import org.benjamin.filetree.model.repository.FactoryHolder;
 
 import javafx.application.Application;
@@ -9,6 +8,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Main, Application start point.
+ * @author benjamin
+ *
+ */
 public class FileTreeApp extends Application {
 
   public static void main(String[] args) {

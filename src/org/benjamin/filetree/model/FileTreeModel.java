@@ -4,6 +4,11 @@ import java.util.Set;
 
 import org.benjamin.filetree.controller.ComponentEnum;
 
+/**
+ * Interface for separating the controller and model.
+ * @author benjamin
+ *
+ */
 public interface FileTreeModel {
 
   /**

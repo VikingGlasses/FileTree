@@ -102,7 +102,7 @@ public class Branch implements TreeComponent {
 
   @Override
   public ComponentEnum getComponentType() {
-    return ComponentEnum.BRANCH;
+    return ComponentEnum.COMPOSITE;
   }
 
 }

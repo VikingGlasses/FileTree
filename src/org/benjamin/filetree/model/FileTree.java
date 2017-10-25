@@ -3,38 +3,68 @@ package org.benjamin.filetree.model;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.benjamin.filetree.controller.ComponentEnum;
 
+/**
+ * Implementation of FileTreeModel
+ * 
+ * Uses Deque's for back and forward with an inner class History to represent 
+ * where you are and where you've been.
+ * 
+ * Depends on a implementation of RepesitoryHelper.
+ *  
+ * @see FileTreeModel
+ * @see Deque
+ * @see RepositoryHelper
+ */
 public class FileTree implements FileTreeModel {
+  
+  private class History<T> {
+
+    private T id;
+    private String text;
+    private boolean isSearch;
+
+    private History(T id) {
+      this.id = id;
+      isSearch = false;
+    }
+    
+    private History(T id, String text) {
+      this.id = id;
+      this.text = text;
+      isSearch = true;
+    }
+
+    private T getId() {
+      return id;
+    }
+
+    private String getText() {
+      return text;
+    }
+
+    private boolean isSearch() {
+      return isSearch;
+    }
+
+  }
   
   private Deque<History<Integer>> back = new ArrayDeque<>();
   private Deque<History<Integer>> forward = new ArrayDeque<>();
   private History<Integer> current;
-  private Set<TreeComponent> currentComponents = new TreeSet<>();
+  private Set<TreeComponent> currentComponents;
   
-  private RepositoryHelper repoHelper = new MyRepositoryHelper();
+  private RepositoryHelper repoHelper;
   
-  public FileTree() {
-    current = createHistory(1);
+  /**
+   * Initiates the current components to the roots children.
+   */
+  public FileTree(RepositoryHelper r, int rootId) {
+    repoHelper = r;
+    current = createHistory(rootId);
     updateCurrentComponents();
-  }
-
-  private void updateCurrentComponents() {
-    if (current.isSearch()) {
-      currentComponents =  repoHelper.search(current.getId(), current.getText()); 
-    } else {
-      currentComponents = repoHelper.getChildrenFrom(current.getId());
-    }
-  }
-
-  private History<Integer> createHistory(int identifier) {
-    return new History<>(identifier);
-  }
-
-  private History<Integer> createHistory(String text) {
-    return new History<Integer>(current.getId(), text);
   }
 
   @Override
@@ -82,7 +112,7 @@ public class FileTree implements FileTreeModel {
   @Override
   public void remove(ComponentEnum type, int identifier) {
     switch (type) {
-      case BRANCH:
+      case COMPOSITE:
         repoHelper.removeBranch(identifier);
         break;
       case LEAF:
@@ -102,7 +132,7 @@ public class FileTree implements FileTreeModel {
   @Override
   public void rename(ComponentEnum type, int identifier, String newName) {
     switch (type) {
-      case BRANCH:
+      case COMPOSITE:
         repoHelper.renameBranch(identifier, newName);
         break;
       case LEAF:
@@ -130,19 +160,22 @@ public class FileTree implements FileTreeModel {
       current = createHistory(text);
       currentComponents = repoHelper.search(current.getId(), text);
     }
-    /* equivalent to above if statement
-     if (current.isSearch()) {
-      if (!current.getText().equals(text)) {
-        back.push(current);
-        current = new History<Integer>(current.getId(), text);
-        currentComponents = repoHelper.search(current.getId(), text);
-      }
+  }
+
+  private void updateCurrentComponents() {
+    if (current.isSearch()) {
+      currentComponents =  repoHelper.search(current.getId(), current.getText()); 
     } else {
-      back.push(current);
-      current = new History<Integer>(current.getId(), text);
-      currentComponents = repoHelper.search(current.getId(), text);
+      currentComponents = repoHelper.getChildrenFrom(current.getId());
     }
-     */
+  }
+
+  private History<Integer> createHistory(int identifier) {
+    return new History<>(identifier);
+  }
+
+  private History<Integer> createHistory(String text) {
+    return new History<Integer>(current.getId(), text);
   }
 
 }

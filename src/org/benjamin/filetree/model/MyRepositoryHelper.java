@@ -13,11 +13,24 @@ import org.benjamin.filetree.model.repository.JpaExecutionContainerImpl;
 import org.benjamin.filetree.model.repository.LeafRepositoryI;
 import org.benjamin.filetree.model.repository.LeafRepositoryImpl;
 
+/**
+ * Quick and dirty implementation of RepositoryHelper.
+ * Warning inefficient search algorithm.
+ * Depends on BranchRepositoryI and LeafRepositoryI
+ * 
+ * @see BranchRepositoryI
+ * @see LeafRepositoryI
+ * @author benjamin
+ *
+ */
 public class MyRepositoryHelper implements RepositoryHelper {
   
   private BranchRepositoryI branchRepo;
   private LeafRepositoryI leafRepo;
   
+  /**
+   * Creates and uses a implementation of BranchRepositoryI and LeafRepositoryI.
+   */
   public MyRepositoryHelper() {
     JpaExecutionContainer container = new JpaExecutionContainerImpl();
     branchRepo = new BranchRepositoryImpl(container);
@@ -54,14 +67,18 @@ public class MyRepositoryHelper implements RepositoryHelper {
     return leafRepo.changeName(id, newName);
   }
 
+  /**
+   * Warning bad implementation: Performs 3*n number of queries. Where n is the number of sub-branches.  
+   */
   @Override
   public Set<TreeComponent> search(int rootId, String text) {
+    // 
     Set<TreeComponent> result = new TreeSet<>(new TreeComponentComperator());
     Queue<Branch> queue = new LinkedList<>();
     queue.offer(branchRepo.get(rootId));
     while (!queue.isEmpty()) {
       Branch branch = queue.poll();
-      queue.addAll(branchRepo.getChildrenFrom(branch.getId()));
+      queue.addAll(branchRepo.getSubBranchesFrom(branch.getId()));
       result.addAll(branchRepo.search(branch.getId(), text));
       result.addAll(leafRepo.search(branch.getId(), text));
     }
@@ -71,7 +88,7 @@ public class MyRepositoryHelper implements RepositoryHelper {
   @Override
   public Set<TreeComponent> getChildrenFrom(int id) {
     Set<TreeComponent> result = new TreeSet<>(new TreeComponentComperator());
-    result.addAll(branchRepo.getChildrenFrom(id));
+    result.addAll(branchRepo.getSubBranchesFrom(id));
     result.addAll(branchRepo.getLeafsFrom(id));
     return result;
   }

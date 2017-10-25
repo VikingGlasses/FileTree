@@ -1,4 +1,6 @@
-package org.benjamin.filetree.controller;
+package org.benjamin.filetree.model;
+
+import org.benjamin.filetree.controller.ComponentEnum;
 
 import javafx.scene.control.Label;
 
@@ -32,6 +34,22 @@ public class TreeComponentNode extends Label {
   }
   public void setType(ComponentEnum type) {
     this.type = type;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    TreeComponentNode other = (TreeComponentNode) obj;
+    if (identifier != other.identifier)
+      return false;
+    if (type != other.type)
+      return false;
+    return true;
   }
 
 }
