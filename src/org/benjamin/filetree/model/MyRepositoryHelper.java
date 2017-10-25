@@ -1,5 +1,6 @@
 package org.benjamin.filetree.model;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
@@ -27,6 +28,17 @@ public class MyRepositoryHelper implements RepositoryHelper {
   
   private BranchRepositoryI branchRepo;
   private LeafRepositoryI leafRepo;
+  
+  private Comparator<TreeComponent> comparator = (o1, o2) -> {
+    int i = o1.getComponentType().compareTo(o2.getComponentType());
+    if (i == 0) {
+      i = o1.getText().compareToIgnoreCase(o2.getText());
+      if (i == 0) {
+        i = Integer.compare(o1.getIdentifier(), o2.getIdentifier());
+      }
+    }
+    return i;
+  };
   
   /**
    * Creates and uses a implementation of BranchRepositoryI and LeafRepositoryI.
@@ -73,7 +85,7 @@ public class MyRepositoryHelper implements RepositoryHelper {
   @Override
   public Set<TreeComponent> search(int rootId, String text) {
     // 
-    Set<TreeComponent> result = new TreeSet<>(new TreeComponentComperator());
+    Set<TreeComponent> result = new TreeSet<>(comparator);
     Queue<Branch> queue = new LinkedList<>();
     queue.offer(branchRepo.get(rootId));
     while (!queue.isEmpty()) {
@@ -87,7 +99,7 @@ public class MyRepositoryHelper implements RepositoryHelper {
 
   @Override
   public Set<TreeComponent> getChildrenFrom(int id) {
-    Set<TreeComponent> result = new TreeSet<>(new TreeComponentComperator());
+    Set<TreeComponent> result = new TreeSet<>(comparator);
     result.addAll(branchRepo.getSubBranchesFrom(id));
     result.addAll(branchRepo.getLeafsFrom(id));
     return result;

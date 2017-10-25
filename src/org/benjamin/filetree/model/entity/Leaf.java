@@ -7,9 +7,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.benjamin.filetree.controller.ComponentEnum;
+import org.benjamin.filetree.controller.ComponentTypeEnum;
 import org.benjamin.filetree.model.TreeComponent;
 
+/**
+ * POJO for representing a DB entity leaf that implements TreeComponent.
+ * @see TreeComponent
+ * @author benjamin
+ *
+ */
 @Entity
 @Table(name="leaf")
 public class Leaf implements TreeComponent {
@@ -97,8 +103,8 @@ public class Leaf implements TreeComponent {
   }
 
   @Override
-  public ComponentEnum getComponentType() {
-    return ComponentEnum.LEAF;
+  public ComponentTypeEnum getComponentType() {
+    return ComponentTypeEnum.LEAF;
   }
 
 }

@@ -1,11 +1,14 @@
 package org.benjamin.filetree.controller;
 
+import org.benjamin.filetree.model.TreeComponent;
+
 /**
- * Defines TreeComponent types.
+ * Defines tree component types.
+ * @see TreeComponent
  * @author benjamin
  *
  */
-public enum ComponentEnum {
+public enum ComponentTypeEnum {
   
   COMPOSITE,
   LEAF;

@@ -166,14 +166,14 @@ public class FileTreeController {
     updateFolderView();
   }
 
-  public void treeNodeClicked(MouseEvent event) {
+  private void treeNodeClicked(MouseEvent event) {
     // TODO type check
     TreeComponentNode source = (TreeComponentNode) event.getSource();
     selection.select(source);
     source.requestFocus();
     MouseButton button = event.getButton();
     int clickCount = event.getClickCount();
-    if (button == MouseButton.PRIMARY && clickCount == 2 && source.getType() == ComponentEnum.COMPOSITE) {
+    if (button == MouseButton.PRIMARY && clickCount == 2 && source.getType() == ComponentTypeEnum.COMPOSITE) {
       model.goTo(source.getIdentifier());
       selection.clearSelection();
       updateFolderView();

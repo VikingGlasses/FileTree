@@ -12,10 +12,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.benjamin.filetree.controller.ComponentEnum;
-import org.benjamin.filetree.controller.TreeComponentNodeFactory;
+import org.benjamin.filetree.controller.ComponentTypeEnum;
 import org.benjamin.filetree.model.TreeComponent;
 
+
+/**
+ * POJO for representing a DB entity branch that implements TreeComponent.
+ * @see TreeComponent
+ * @author benjamin
+ *
+ */
 @Entity
 @Table(name="branch")
 public class Branch implements TreeComponent {
@@ -101,8 +107,8 @@ public class Branch implements TreeComponent {
   }
 
   @Override
-  public ComponentEnum getComponentType() {
-    return ComponentEnum.COMPOSITE;
+  public ComponentTypeEnum getComponentType() {
+    return ComponentTypeEnum.COMPOSITE;
   }
 
 }

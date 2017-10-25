@@ -5,7 +5,11 @@ import java.util.Collection;
 import org.benjamin.filetree.model.entity.Branch;
 import org.benjamin.filetree.model.entity.Leaf;
 
-
+/**
+ * Implementation of BranchRepositoryI
+ * @author benjamin
+ *
+ */
 public class BranchRepositoryImpl implements BranchRepositoryI {
   
   JpaExecutionContainer container;

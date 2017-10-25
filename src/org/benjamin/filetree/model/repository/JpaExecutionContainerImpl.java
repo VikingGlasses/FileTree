@@ -8,7 +8,7 @@ import javax.persistence.EntityTransaction;
 import org.hibernate.HibernateException;
 
 /**
- * Quick and dirty implementation of JpaExecutionContainer, experimental.
+ * Quick and dirty implementation of JpaExecutionContainer still in it's experimental stages.
  * @author benjamin
  *
  */

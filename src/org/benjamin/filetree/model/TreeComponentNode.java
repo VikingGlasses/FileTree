@@ -1,13 +1,19 @@
 package org.benjamin.filetree.model;
 
-import org.benjamin.filetree.controller.ComponentEnum;
+import org.benjamin.filetree.controller.ComponentTypeEnum;
 
 import javafx.scene.control.Label;
 
+/**
+ * A view representation of a  tree component.
+ * @see TreeComponent
+ * @author benjamin
+ *
+ */
 public class TreeComponentNode extends Label {
 
   private int identifier;
-  private ComponentEnum type;
+  private ComponentTypeEnum type;
   
   public TreeComponentNode() {
     super();
@@ -17,7 +23,7 @@ public class TreeComponentNode extends Label {
    * @param identifier
    * @param type
    */
-  public TreeComponentNode(int identifier, ComponentEnum type) {
+  public TreeComponentNode(int identifier, ComponentTypeEnum type) {
     super();
     this.identifier = identifier;
     this.type = type;
@@ -29,10 +35,10 @@ public class TreeComponentNode extends Label {
   public void setIdentifier(int identifier) {
     this.identifier = identifier;
   }
-  public ComponentEnum getType() {
+  public ComponentTypeEnum getType() {
     return type;
   }
-  public void setType(ComponentEnum type) {
+  public void setType(ComponentTypeEnum type) {
     this.type = type;
   }
 

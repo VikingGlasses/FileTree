@@ -5,6 +5,14 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.benjamin.filetree.model.TreeComponent;
+
+/**
+ * POJO for representing a DB entity.
+ * @see TreeComponent
+ * @author benjamin
+ *
+ */
 @Entity
 @Table(name="type")
 public class Type {

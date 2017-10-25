@@ -2,7 +2,7 @@ package org.benjamin.filetree.model;
 
 import java.util.Set;
 
-import org.benjamin.filetree.controller.ComponentEnum;
+import org.benjamin.filetree.controller.ComponentTypeEnum;
 
 /**
  * Interface for separating the controller and model.
@@ -50,7 +50,7 @@ public interface FileTreeModel {
    * @param type The nodes type.
    * @param identifier The nodes identifier.
    */
-  void remove(ComponentEnum type, int identifier);
+  void remove(ComponentTypeEnum type, int identifier);
 
   /**
    * Returns the current tree components.
@@ -64,7 +64,7 @@ public interface FileTreeModel {
    * @param identifier The nodes identifier.
    * @param newName The nodes new name.
    */
-  void rename(ComponentEnum type, int identifier, String newName);
+  void rename(ComponentTypeEnum type, int identifier, String newName);
 
   /**
    * Goes to the branch with the id 'identifier'.

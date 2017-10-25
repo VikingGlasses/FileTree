@@ -4,7 +4,7 @@ import java.util.Collection;
 
 /**
  * JPA Execution container is designed for executing JPA code within a try-catch-finally block. 
- * TODO callback functionality.
+ * TODO add callback functionality, possible as new interface.
  * @author benjamin
  *
  */

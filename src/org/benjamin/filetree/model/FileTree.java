@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Set;
 
-import org.benjamin.filetree.controller.ComponentEnum;
+import org.benjamin.filetree.controller.ComponentTypeEnum;
 
 /**
  * Implementation of FileTreeModel
@@ -110,7 +110,7 @@ public class FileTree implements FileTreeModel {
   }
 
   @Override
-  public void remove(ComponentEnum type, int identifier) {
+  public void remove(ComponentTypeEnum type, int identifier) {
     switch (type) {
       case COMPOSITE:
         repoHelper.removeBranch(identifier);
@@ -130,7 +130,7 @@ public class FileTree implements FileTreeModel {
   }
 
   @Override
-  public void rename(ComponentEnum type, int identifier, String newName) {
+  public void rename(ComponentTypeEnum type, int identifier, String newName) {
     switch (type) {
       case COMPOSITE:
         repoHelper.renameBranch(identifier, newName);
